@@ -23,9 +23,7 @@ class Params
 
 
 Fl_Hold_Browser *bro = nullptr;
-Fl_Group *chatgroup = nullptr;
-Fl_Group *textgroup = nullptr;
-Fl_Group *contactsgroup= nullptr;
+Fl_Group *group = nullptr;
 Fl_Text_Display *chat = nullptr;
 Fl_Input *input = nullptr;
 
@@ -59,52 +57,39 @@ void sendMessage(Fl_Widget *, void *v)
 int main(int argc, char **argv)
 {
 
-  Fl_Window *window = new Fl_Window(490, 280);
+  Fl_Window *window = new Fl_Window(570, 280);
   window->resizable(*window);
   window->begin();
   {
+    bro = new Fl_Hold_Browser(10, 10, 110, 260);
 
-    contactsgroup = new Fl_Group(10, 10, 110, 260);
-    chatgroup = new Fl_Group(130, 10, 350, 230);
-    textgroup = new Fl_Group(130,245,330,20);
-
-    // textgroup->resizable(nullptr);
-    // contactsgroup->resizable(nullptr);
-
-    // chatgroup->box(FL_ENGRAVED_BOX);
-    // chatgroup->align(FL_ALIGN_INSIDE|FL_ALIGN_TOP);
-    // chatgroup->labelsize(24);
-
-    Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    Params *p = new Params(buff);
-    contactsgroup->begin();
+    group = new Fl_Group(130, 10, 430, 260, "Mekanix");
+    group->box(FL_ENGRAVED_BOX);
+    group->align(FL_ALIGN_INSIDE|FL_ALIGN_TOP);
+    group->labelsize(24);
+    group->begin();
     {
-      bro = new Fl_Hold_Browser(10, 10, 110, 260);
-      bro->add("Meka", p);
-      bro->add("Dervish", p);
-    }
-    contactsgroup->end();
-    chatgroup->begin();
-    {
-        chat = new Fl_Text_Display(130, 10, 350, 230);
-        buff = new Fl_Text_Buffer();
-        p = new Params(buff);
-    }
-    chatgroup->end();
-    textgroup->begin();
-    {
-        input = new Fl_Input(130,245,300,20);
+        chat = new Fl_Text_Display(135, 40, 420, 200);
+        Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+        chat->buffer(*buff);
+        buff->append("Mekanix: cao\n");
+        buff->append("Momo: oj\n");
+        input = new Fl_Input(210,245,300,20,"Message:");
         input->take_focus();
-        Fl_Button *button = new Fl_Button(440,245,40,20,"Send");
+        Fl_Button *button = new Fl_Button(510,245,40,20,"Send");
+        Params *p = new Params(buff);
+        bro->add("Meka", p);
         button->callback(sendMessage, p);
         button->shortcut(FL_Enter);
+
+        buff = new Fl_Text_Buffer();
+        p = new Params(buff);
+        bro->add("Dervish", p);
     }
-    textgroup->end();
+    group->end();
+    group->show();
     bro->callback(selectGroup);
     bro->select(1);
-    contactsgroup->show();
-    chatgroup->show();
-    textgroup->show();
   }
   window->end();
   window->show(argc, argv);
